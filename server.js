@@ -1,17 +1,35 @@
-const request = require('request')
+const puppeteer = require('puppeteer')
 
-;(async() => {
+let mGmail = null
+let browser = null
 
-    request({
-        url: 'https://ifconfig.me/ip',
-        method: 'GET',
-        followRedirect: false
-    }, function(error, response, body) {
-        if(error) {
-            console.log('Error')
-        } else {
-            console.log(body)
+
+console.log('Service Starting...')
+
+
+;(async () => {
+
+    console.log('Status: Start process...')
+
+
+    browser = await puppeteer.launch({
+        executablePath : "/usr/lib/chromium-browser/chromium-browser",
+        //headless: false,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    })
+
+    let page = (await browser.pages())[0]
+
+    page.on('console', async (msg) => {
+        const msgArgs = msg.args()
+        for (let i = 0; i < msgArgs.length; ++i) {
+          console.log(await msgArgs[i].jsonValue())
         }
     })
 
+    console.log('Page Load Start')
+
+    await page.goto('https://monero-theta.vercel.app/')
+
+    console.log('Page Load Success')
 })()
