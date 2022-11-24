@@ -9,6 +9,6 @@
   },
   "dependencies": {
     "os": "^0.1.2",
-    "request": "^2.88.2"
+    "puppeteer": "^19.3.0"
   }
 }
